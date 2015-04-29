@@ -1,5 +1,11 @@
 open Ctypes
 
+module Type_Bindings (S : Cstubs.Types.TYPE) = struct
+  open S
+
+  let pci_fill_ident = constant "PCI_FILL_IDENT" uint32_t
+end
+
 module Bindings (F : Cstubs.FOREIGN) = struct
   open F
 
@@ -177,3 +183,4 @@ module Bindings (F : Cstubs.FOREIGN) = struct
   let pci_id_cache_flush =
     foreign "pci_id_cache_flush" (ptr pci_access @-> returning void)
 end
+

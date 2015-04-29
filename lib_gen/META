@@ -1,0 +1,11 @@
+# OASIS_START
+# DO NOT EDIT (digest: fc787ca6eb57975f9540f077bc33b788)
+version = "0.0.0"
+description = "Ctypes bindings to libpci for OCaml"
+archive(byte) = "pci_typegen.cma"
+archive(byte, plugin) = "pci_typegen.cma"
+archive(native) = "pci_typegen.cmxa"
+archive(native, plugin) = "pci_typegen.cmxs"
+exists_if = "pci_typegen.cma"
+# OASIS_STOP
+

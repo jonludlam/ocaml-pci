@@ -8,6 +8,7 @@ Plugins:        DevFiles (0.4), META (0.4)
 BuildTools:     ocamlbuild
 
 Library pci
+  Install:          true
   Path:             lib
   Modules:          Pci
   InternalModules:  Pci_bindings, Pci_generated
@@ -22,6 +23,21 @@ Executable pci_stubgen
   Path:           lib_gen
   MainIs:         pci_stubgen.ml
   BuildDepends:   ctypes.stubs
+
+Executable pci_typegen_gen
+  Install: false
+  Path: lib_gen
+  MainIs: pci_typegen_gen.ml
+  BuildDepends: ctypes.stubs
+
+Executable pci_typegen
+  Install: false
+  Path: lib_gen
+  MainIs: pci_typegen.ml
+  CSources: pci_typegen.c
+  CCLib: -lpci
+  CCOpt: -I $pkg_ctypes_stubs -o pci_typegen
+  BuildTools: pci_typegen
 
 Executable test_pci
   Build$:         flag(tests)

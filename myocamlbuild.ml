@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: c79ca43745696b7d7dd14590cf858fbf) *)
+(* DO NOT EDIT (digest: f5b7d08a79a8cc0c4ff65442717c73a6) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -608,7 +608,7 @@ open Ocamlbuild_plugin;;
 let package_default =
   {
      MyOCamlbuildBase.lib_ocaml = [("pci", ["lib"], [])];
-     lib_c = [("pci", "lib", [])];
+     lib_c = [("pci", "lib", []); ("pci_typegen", "lib_gen", [])];
      flags =
        [
           (["oasis_library_pci_ccopt"; "compile"],
@@ -619,6 +619,25 @@ let package_default =
           (["oasis_library_pci_cclib"; "link"],
             [(OASISExpr.EBool true, S [A "-cclib"; A "-lpci"])]);
           (["oasis_library_pci_cclib"; "ocamlmklib"; "c"],
+            [(OASISExpr.EBool true, S [A "-lpci"])]);
+          (["oasis_executable_pci_typegen_ccopt"; "compile"],
+            [
+               (OASISExpr.EBool true,
+                 S
+                   [
+                      A "-ccopt";
+                      A "-I";
+                      A "-ccopt";
+                      A "${pkg_ctypes_stubs}";
+                      A "-ccopt";
+                      A "-o";
+                      A "-ccopt";
+                      A "pci_typegen"
+                   ])
+            ]);
+          (["oasis_executable_pci_typegen_cclib"; "link"],
+            [(OASISExpr.EBool true, S [A "-cclib"; A "-lpci"])]);
+          (["oasis_executable_pci_typegen_cclib"; "ocamlmklib"; "c"],
             [(OASISExpr.EBool true, S [A "-lpci"])])
        ];
      includes = [("lib_test", ["lib"])]
@@ -629,7 +648,7 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 633 "myocamlbuild.ml"
+# 652 "myocamlbuild.ml"
 (* OASIS_STOP *)
 
 open Ocamlbuild_plugin;;
@@ -638,7 +657,7 @@ dispatch
   (MyOCamlbuildBase.dispatch_combine [
     begin function
     | After_rules ->
-      rule "cstubs: lib/x_bindings.ml -> x_stubs.c, x_stubs.ml"
+      rule "cstubs: lib/x_bindings.ml -> x_stubs.c, x_generated.ml"
         ~prods:["lib/%_stubs.c"; "lib/%_generated.ml"]
         ~deps: ["lib_gen/%_stubgen.byte"]
         (fun env build ->
